@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewData["Title"] = "Add New Task";
+}
+
+<h2>Add New Task</h2>
+
+<form action="../ToDoList/AddTask" method="post">
+    <input type="text" name="TaskDescription" placeholder="Task Description" class="form-control mb-4" />
+    <input type="date" name="DueDate" placeholder="Due Date" class="form-control mb-4" />
+    <div class="form-control mb-4">
+        Completed? <input type="checkbox" name="Completed" value="true" />
+        <input type="checkbox" name="Completed" value="false" hidden />
+    </div>
+    <input type="text" name="UserId" value="" />
+    <input type="submit" value="Add Task" class="form-control mb-4" />
+</form>
