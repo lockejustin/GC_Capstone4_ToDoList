@@ -24,16 +24,39 @@ namespace GC_Capstone4_ToDoListRevisited.Controllers
 
         //Read
         [Authorize]
-        public async Task<IActionResult> ToDoList()
+        //public async Task<IActionResult> ToDoList()
+        //{
+        //    string activeUserName = User.Identity.Name; //finds the user name of the logged in user
+        //    string activeUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value; //finds the user id of the logged in user
+
+        //    var tasks = await _toDoListDb.ToDo.Where(x => x.UserId == activeUserId).ToListAsync(); //Fill list with all tasks from db that match the user id of the logged in user
+
+        //    ViewBag.UserName = activeUserName; //sends user name to view
+
+        //    return View(tasks);
+        //}
+
+        [Authorize]
+        public async Task<IActionResult> ToDoList(string searchString)
         {
             string activeUserName = User.Identity.Name; //finds the user name of the logged in user
             string activeUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value; //finds the user id of the logged in user
 
-            var tasks = await _toDoListDb.ToDo.Where(x => x.UserId == activeUserId).ToListAsync(); //Fill list with all tasks from db that match the user id of the logged in user
-
             ViewBag.UserName = activeUserName; //sends user name to view
 
-            return View(tasks);
+
+            if (searchString == null)
+            {
+                var tasks = await _toDoListDb.ToDo.Where(x => x.UserId == activeUserId).ToListAsync(); //Fill list with all tasks from db that match the user id of the logged in user
+
+                return View(tasks);
+            }
+            else
+            {
+                var tasks = await _toDoListDb.ToDo.Where(x => x.TaskDescription.Contains(searchString) && x.UserId ==  activeUserId).ToListAsync(); //Fill list with all tasks from db that match the user id of the logged in user and where description contains the search term
+                return View(tasks);
+            }
+            
         }
 
         [Authorize]
