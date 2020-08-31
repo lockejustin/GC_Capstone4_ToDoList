@@ -37,6 +37,22 @@ namespace GC_Capstone4_ToDoListRevisited.Controllers
         }
 
         [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ToDoSearch(string searchString)
+        {
+            string activeUserName = User.Identity.Name; //finds the user name of the logged in user
+            string activeUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value; //finds the user id of the logged in user
+
+            var tasks = await _toDoListDb.ToDo.Where(x => x.UserId == activeUserId).ToListAsync(); //Fill list with all tasks from db that match the user id of the logged in user
+            tasks = await _toDoListDb.ToDo.Where(x => x.TaskDescription.Contains(searchString)).ToListAsync(); //Fill list with all tasks from db that match the user id of the logged in user
+
+            ViewBag.UserName = activeUserName; //sends user name to view
+
+            return RedirectToAction("ToDoList", tasks);
+
+        }
+
+        [Authorize]
         [HttpGet]
         public IActionResult AddTask()
         {
